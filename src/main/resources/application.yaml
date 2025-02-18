@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/code_challenge
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId:  Ov23libx85lI2vcnaJhs
+            clientSecret: 22bf7c768891af3c94c462214381da430c20e458
