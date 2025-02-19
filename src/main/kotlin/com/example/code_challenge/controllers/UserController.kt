@@ -17,12 +17,10 @@ import java.util.*
 
 @RestController
 @RequestMapping(Mapping.USER)
-
 class UserController {
 
     @Autowired
     lateinit var userService: UserService
-
     @GetMapping("/{email}", produces = ["application/json"])
     suspend fun getUser(@PathVariable email: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
@@ -50,6 +48,7 @@ class UserController {
         return ResponseEntity.ok(updateData)
     }
 
+    @CrossOrigin(methods = [RequestMethod.DELETE])
     @DeleteMapping("/{email}")
     suspend fun deleteUser(@PathVariable email: String) {
         newSuspendedTransaction {
