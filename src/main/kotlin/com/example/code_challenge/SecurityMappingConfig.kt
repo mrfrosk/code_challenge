@@ -15,20 +15,26 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 class SecurityMappingConfig {
 
-    @Autowired
-    lateinit var filter: CustomCorsFilter
+//    @Autowired
+//    lateinit var filter: CustomCorsFilter
     @Bean
     fun securityFilterChain(
         http: HttpSecurity
     ): DefaultSecurityFilterChain {
         http
-            .cors(Customizer.withDefaults())
+//            .headers {
+//                it.contentSecurityPolicy {
+//                    contentSecurityPolicyConfig -> contentSecurityPolicyConfig.policyDirectives("default-src 'self'")
+//                }
+//            }
             .csrf { it.disable()}
+            .cors(Customizer.withDefaults())
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }.oauth2Login {}.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
-            }.addFilterBefore(filter, BasicAuthenticationFilter::class.java)
+            }
+//            .addFilterBefore(filter, BasicAuthenticationFilter::class.java)
         return http.build()
     }
 

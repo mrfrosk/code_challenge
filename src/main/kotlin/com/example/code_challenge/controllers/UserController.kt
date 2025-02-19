@@ -17,16 +17,12 @@ import java.util.*
 
 @RestController
 @RequestMapping(Mapping.USER)
-@CrossOrigin(
-    origins = ["https://google.com"],
-    methods = [RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE],
-)
+
 class UserController {
 
     @Autowired
     lateinit var userService: UserService
 
-    @CrossOrigin(originPatterns = ["/*"], methods = [RequestMethod.GET])
     @GetMapping("/{email}", produces = ["application/json"])
     suspend fun getUser(@PathVariable email: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
@@ -37,7 +33,6 @@ class UserController {
     }
 
     @PostMapping("", produces = ["application/json"])
-    @CrossOrigin(originPatterns = ["/**"])
     suspend fun registerUser(@RequestBody userData: String): ResponseEntity<*> {
         val user = Json.decodeFromString<UserDto>(userData)
         newSuspendedTransaction {

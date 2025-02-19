@@ -7,8 +7,8 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Component
-@Order(0)
+//@Component
+//@Order(0)
 class CustomCorsFilter: OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
