@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 class UserService {
 
     fun getUser(username: String): UserDto {
-        return getUserIfExists(username)?.toDto() ?: throw Exception("user not exists")
+        return findUser(username).toDto()
     }
 
     fun authUser(loginDto: LoginDto): Boolean {
@@ -22,31 +22,27 @@ class UserService {
 
     fun createUser(userDto: UserDto): UserDto {
         return UserEntity.new {
-                email = userDto.email
-                username = userDto.username
-                password = userDto.password
-            }.toDto()
+            email = userDto.email
+            username = userDto.username
+            password = userDto.password
+        }.toDto()
     }
 
     fun updateUser(username: String, userDto: UserDto) {
-        val user = getUserIfExists(username)
-        if (user != null) {
-            user.email = userDto.email
-            user.username = userDto.username
-            user.password = userDto.password
-        } else {
-            throw Exception("user not exists")
-        }
+        val user = findUser(username)
+        user.email = userDto.email
+        user.username = userDto.username
+        user.password = userDto.password
     }
 
-    fun deleteUser(username: String){
-        val user = getUserIfExists(username)
-        user?.delete()
+    fun deleteUser(username: String) {
+        val user = findUser(username)
+        user.delete()
     }
 
-    private fun getUserIfExists(username: String): UserEntity? {
+    private fun findUser(username: String): UserEntity {
         return UserEntity.find {
             UsersTable.username eq username
-        }.firstOrNull()
+        }.first()
     }
 }

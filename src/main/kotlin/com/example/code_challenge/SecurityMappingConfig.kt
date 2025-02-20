@@ -17,18 +17,19 @@ class SecurityMappingConfig {
 
     @Autowired
     lateinit var filter: CustomCorsFilter
+
     @Bean
     fun securityFilterChain(
         http: HttpSecurity
     ): DefaultSecurityFilterChain {
         http
             .headers {
-                it.contentSecurityPolicy {
-                    contentSecurityPolicyConfig -> contentSecurityPolicyConfig.policyDirectives("default-src 'self'")
+                it.contentSecurityPolicy { contentSecurityPolicyConfig ->
+                    contentSecurityPolicyConfig.policyDirectives("default-src 'self'")
                 }
             }
             .cors(Customizer.withDefaults())
-            .csrf { it.disable()}
+            .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.anyRequest().authenticated()
             }.oauth2Login {}.sessionManagement {
