@@ -6,7 +6,6 @@ import com.example.code_challenge.services.UserService
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -22,6 +21,7 @@ class UserController {
 
     @Autowired
     lateinit var userService: UserService
+
     @GetMapping("/{email}", produces = ["application/json"])
     suspend fun getUser(@PathVariable email: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
@@ -32,7 +32,7 @@ class UserController {
     }
 
     @PostMapping("", produces = ["application/json"])
-    suspend fun registerUser(@RequestBody userData: String): ResponseEntity<*> {
+    suspend fun registerUser(@RequestBody userData: String): ResponseEntity<String> {
         val user = Json.decodeFromString<UserDto>(userData)
         newSuspendedTransaction {
             userService.createUser(user)

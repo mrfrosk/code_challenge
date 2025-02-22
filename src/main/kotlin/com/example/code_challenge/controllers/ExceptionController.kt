@@ -9,25 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.sql.BatchUpdateException
+import java.util.NoSuchElementException
 
 
 @ControllerAdvice
 class ExceptionController: ResponseEntityExceptionHandler() {
-    @ExceptionHandler(BatchUpdateException::class)
-    fun handleConflictException(
-        ex: Exception?, request: WebRequest?
-    ): ResponseEntity<Any> {
-        return ResponseEntity<Any>(
-            "This user already exists", HttpHeaders(), HttpStatus.CONFLICT
-        )
-    }
-
     @ExceptionHandler(NoSuchElementException::class)
-    fun handleNotFoundException(
-        ex: Exception?, request: WebRequest?
-    ): ResponseEntity<Any> {
-        return ResponseEntity<Any>(
-            "not found user", HttpHeaders(), HttpStatus.NOT_FOUND
-        )
-    }
+    fun handleNotFoundException() = ResponseEntity.status(HttpStatus.NOT_FOUND).build<Nothing>()
+
+    @ExceptionHandler(BatchUpdateException::class)
+    fun handleConflictException() = ResponseEntity.status(HttpStatus.CONFLICT).build<Nothing>()
 }
