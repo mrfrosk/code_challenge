@@ -14,7 +14,8 @@ class CustomCorsFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        response.setHeader("Access-Control-Allow-Origin", "*")
+//        response.setHeader("Access-Control-Allow-Origin", "*")
+//        response.setHeader("Access-Control-Allow-Headers", "Content-type")
         filterChain.doFilter(request, response)
     }
 }

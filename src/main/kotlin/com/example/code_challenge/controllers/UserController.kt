@@ -16,6 +16,7 @@ import java.util.*
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(Mapping.USER)
 class UserController {
 
@@ -48,7 +49,6 @@ class UserController {
         return ResponseEntity.ok(updateData)
     }
 
-    @CrossOrigin(methods = [RequestMethod.DELETE])
     @DeleteMapping("/{email}")
     suspend fun deleteUser(@PathVariable email: String) {
         newSuspendedTransaction {
