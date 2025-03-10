@@ -28,7 +28,7 @@ class AuthController {
         val loginDto = Json.decodeFromString<LoginDto>(data)
         return if (transaction { userService.authUser(loginDto) }){
             val tokens = TokensDto(
-                jwtService.generateRefreshToken(loginDto.email),
+                jwtService.generateAccessToken(loginDto.email),
                 jwtService.generateRefreshToken(loginDto.email)
             )
             ResponseEntity.ok(tokens)
