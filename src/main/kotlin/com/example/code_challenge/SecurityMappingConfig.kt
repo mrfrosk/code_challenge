@@ -33,8 +33,15 @@ class SecurityMappingConfig {
             .authorizeHttpRequests {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
-                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "${Mapping.USER}/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/**").permitAll()
+                    .requestMatchers("${Mapping.USER}/**").authenticated()
+//                    .requestMatchers(HttpMethod.POST,"${Mapping.USER}/**").authenticated()
+//                    .requestMatchers(HttpMethod.PUT,"${Mapping.USER}/**").authenticated()
+//                    .requestMatchers(HttpMethod.DELETE,"${Mapping.USER}/**").authenticated()
+                    .requestMatchers("${Mapping.CHALLENGE}/**").authenticated()
+//                    .requestMatchers(HttpMethod.POST,"${Mapping.CHALLENGE}/**").authenticated()
+//                    .requestMatchers(HttpMethod.PUT,"${Mapping.CHALLENGE}/**").authenticated()
+//                    .requestMatchers(HttpMethod.DELETE,"${Mapping.CHALLENGE}/**").authenticated()
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
