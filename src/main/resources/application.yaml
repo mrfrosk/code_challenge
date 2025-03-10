@@ -1,3 +1,11 @@
+jwt:
+  access:
+    secret: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    expiration: 86400 # a day
+  refresh:
+    secret: 52A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    expiration: 604800 # 7 days
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/code_challenge

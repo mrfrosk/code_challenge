@@ -1,14 +1,18 @@
 package com.example.code_challenge
 
+import com.example.code_challenge.controllers.Mapping
+import com.example.code_challenge.services.JwtAuthenticationFilter
+import jakarta.servlet.DispatcherType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 
 @Configuration
@@ -16,24 +20,25 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 class SecurityMappingConfig {
 
     @Autowired
-    lateinit var filter: CustomCorsFilter
+    lateinit var filter: JwtAuthenticationFilter
 
     @Bean
     fun securityFilterChain(
         http: HttpSecurity
     ): DefaultSecurityFilterChain {
         http
-//            .headers {
-//                it.contentSecurityPolicy { contentSecurityPolicyConfig ->
-//                    contentSecurityPolicyConfig.policyDirectives("default-src 'self' * /")
-//                }
-//            }
+
             .cors(Customizer.withDefaults())
             .csrf { it.disable() }
-//            .authorizeHttpRequests {
-//                it.anyRequest().permitAll()
-//            }.oauth2Login {}
-            .addFilterBefore(filter, BasicAuthenticationFilter::class.java)
+            .authorizeHttpRequests {
+                it
+                    .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/login").permitAll()
+                    .requestMatchers(HttpMethod.GET, "${Mapping.USER}/**").authenticated()
+            }.sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 

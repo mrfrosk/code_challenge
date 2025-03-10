@@ -16,7 +16,7 @@ class UserService {
 
     fun authUser(loginDto: LoginDto): Boolean {
         return UserEntity.find {
-            (UsersTable.username eq loginDto.username) and (UsersTable.password eq loginDto.password)
+            (UsersTable.email eq loginDto.email) and (UsersTable.password eq loginDto.password)
         }.firstOrNull() != null
     }
 
@@ -39,6 +39,10 @@ class UserService {
         val user = findUser(username)
         user.delete()
     }
+
+    fun isExists(email: String) = UserEntity.find {
+        UsersTable.email eq email
+    }.firstOrNull() != null
 
     private fun findUser(username: String): UserEntity {
         return UserEntity.find {

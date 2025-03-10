@@ -65,16 +65,4 @@ class UserController {
         }
     }
 
-    @PostMapping("/login")
-    suspend fun login(@RequestBody userDto: String): ResponseEntity<*> {
-        val loginData = Json.decodeFromString<LoginDto>(userDto)
-        val authStatus = newSuspendedTransaction {
-            userService.authUser(loginData)
-        }
-        return if (authStatus) {
-            ResponseEntity.ok().build<Nothing>()
-        } else {
-            throw AccessDeniedException("")
-        }
-    }
 }

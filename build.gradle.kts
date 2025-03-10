@@ -1,6 +1,8 @@
 val ktorVersion = "3.0.3"
 val exposedVersion = "0.59.0"
 val coroutineVersion = "1.9.0"
+val auth0Version = "4.2.1"
+val jwtVersion = "0.12.3"
 
 plugins {
 	kotlin("jvm") version "2.1.0"
@@ -46,6 +48,9 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("com.auth0", "java-jwt", auth0Version)
+	implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
+	implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
 }
 
 kotlin {
