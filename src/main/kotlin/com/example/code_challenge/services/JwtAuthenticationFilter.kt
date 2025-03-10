@@ -26,6 +26,9 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
+
         println("вошли в фильтер")
         val authHeader: String? = request.getHeader("authorization")
 
@@ -35,11 +38,11 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         }
         val jwtToken = authHeader!!.extractTokenValue()
         println("jwt token: $jwtToken")
-//        if (!tokenService.verifyAccessToken(jwtToken)) {
-//            println("не подтвердили токен")
-//            filterChain.doFilter(request, response)
-//            return
-//        }
+        if (!tokenService.verifyAccessToken(jwtToken)) {
+            println("не подтвердили токен")
+            filterChain.doFilter(request, response)
+            return
+        }
 
         val email = tokenService.getEmail(jwtToken)
         println(email)
