@@ -34,8 +34,8 @@ class SecurityMappingConfig {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/**").permitAll()
+                    .requestMatchers(HttpMethod.POST,"${Mapping.USER}/**").permitAll()
                     .requestMatchers("${Mapping.USER}/**").authenticated()
-//                    .requestMatchers(HttpMethod.POST,"${Mapping.USER}/**").authenticated()
 //                    .requestMatchers(HttpMethod.PUT,"${Mapping.USER}/**").authenticated()
 //                    .requestMatchers(HttpMethod.DELETE,"${Mapping.USER}/**").authenticated()
                     .requestMatchers("${Mapping.CHALLENGE}/**").authenticated()
