@@ -1,6 +1,8 @@
-package com.example.code_challenge.services
+package com.example.code_challenge.security.filters
 
 
+import com.example.code_challenge.services.JwtService
+import com.example.code_challenge.services.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -26,8 +28,7 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization")
-        response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
+
 
         val authHeader: String? = request.getHeader("authorization")
 
@@ -37,13 +38,11 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         }
         val jwtToken = authHeader!!.extractTokenValue()
         if (!tokenService.verifyAccessToken(jwtToken)) {
-            println("не подтвердили токен")
             filterChain.doFilter(request, response)
             return
         }
 
         val email = tokenService.getEmail(jwtToken)
-        println(email)
 
         if (transaction { userService.isExists(email) }) {
             println(transaction { userService.isExists(email) })

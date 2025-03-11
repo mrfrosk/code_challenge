@@ -1,4 +1,4 @@
-package com.example.first.Services.dto
+package com.example.code_challenge.data.database.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

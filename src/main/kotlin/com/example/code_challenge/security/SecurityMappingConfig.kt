@@ -1,7 +1,8 @@
-package com.example.code_challenge
+package com.example.code_challenge.security
 
 import com.example.code_challenge.controllers.Mapping
-import com.example.code_challenge.services.JwtAuthenticationFilter
+import com.example.code_challenge.security.filters.CustomCorsFilter
+import com.example.code_challenge.security.filters.JwtAuthenticationFilter
 import jakarta.servlet.DispatcherType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 
 @Configuration
@@ -20,32 +22,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityMappingConfig {
 
     @Autowired
-    lateinit var filter: JwtAuthenticationFilter
+    lateinit var jwtFilter: JwtAuthenticationFilter
+
+    @Autowired
+    lateinit var corsFilter: CustomCorsFilter
 
     @Bean
     fun securityFilterChain(
         http: HttpSecurity
     ): DefaultSecurityFilterChain {
         http
-
             .cors(Customizer.withDefaults())
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     .requestMatchers(HttpMethod.POST, "${Mapping.AUTH}/**").permitAll()
-                    .requestMatchers(HttpMethod.POST,"${Mapping.USER}/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "${Mapping.USER}/**").permitAll()
                     .requestMatchers("${Mapping.USER}/**").authenticated()
-//                    .requestMatchers(HttpMethod.PUT,"${Mapping.USER}/**").authenticated()
-//                    .requestMatchers(HttpMethod.DELETE,"${Mapping.USER}/**").authenticated()
                     .requestMatchers("${Mapping.CHALLENGE}/**").authenticated()
-//                    .requestMatchers(HttpMethod.POST,"${Mapping.CHALLENGE}/**").authenticated()
-//                    .requestMatchers(HttpMethod.PUT,"${Mapping.CHALLENGE}/**").authenticated()
-//                    .requestMatchers(HttpMethod.DELETE,"${Mapping.CHALLENGE}/**").authenticated()
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(corsFilter, BasicAuthenticationFilter::class.java)
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 
