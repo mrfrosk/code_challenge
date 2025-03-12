@@ -1,15 +1,17 @@
 package com.example.code_challenge
 
+import com.example.code_challenge.data.database.DbInitializer
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Bean
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-
 
 
 @SpringBootApplication
-class CodeChallengeApplication
+class CodeChallengeApplication {
+	init {
+		DbInitializer().run()
+	}
+}
+
 
 fun main(args: Array<String>) {
 	runApplication<CodeChallengeApplication>(*args)
