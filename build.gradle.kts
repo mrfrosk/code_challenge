@@ -3,6 +3,7 @@ val exposedVersion = "0.59.0"
 val coroutineVersion = "1.9.0"
 val auth0Version = "4.2.1"
 val jwtVersion = "0.12.3"
+val kamlVersion = "0.72.0"
 
 plugins {
 	kotlin("jvm") version "2.1.0"
@@ -51,6 +52,7 @@ dependencies {
 	implementation("com.auth0", "java-jwt", auth0Version)
 	implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 	implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+	implementation("com.charleskorn.kaml:kaml:$kamlVersion")
 }
 
 kotlin {

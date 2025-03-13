@@ -56,7 +56,7 @@ class JwtService {
         return verifyToken(token, properties.getRefreshKey())
     }
 
-    fun verifyToken(token: String, key: SecretKey): Boolean {
+    private fun verifyToken(token: String, key: SecretKey): Boolean {
         val parser = Jwts.parser()
             .verifyWith(key)
             .build()

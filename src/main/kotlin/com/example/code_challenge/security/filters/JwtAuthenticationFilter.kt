@@ -45,7 +45,6 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         val email = tokenService.getEmail(jwtToken)
 
         if (transaction { userService.isExists(email) }) {
-            println(transaction { userService.isExists(email) })
             updateContext(email, request)
             filterChain.doFilter(request, response)
         }
@@ -61,7 +60,6 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         val authToken = UsernamePasswordAuthenticationToken(email, null, null)
         authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = authToken
-        println(authToken)
     }
 
 }

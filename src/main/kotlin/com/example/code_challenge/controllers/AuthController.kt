@@ -6,7 +6,6 @@ import com.example.code_challenge.services.UserService
 import com.example.code_challenge.data.database.dto.TokensDto
 import com.example.code_challenge.data.database.dto.UserDto
 import kotlinx.serialization.json.Json
-import org.apache.el.parser.Token
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,7 +30,10 @@ class AuthController {
     @PostMapping("/login")
     suspend fun getTokens(@RequestBody data: String): ResponseEntity<TokensDto> {
         val loginDto = Json.decodeFromString<LoginDto>(data)
-        return if (transaction { userService.authUser(loginDto) }) {
+        val isExists = transaction {
+            userService.isExists(loginDto)
+        }
+        return if (isExists) {
             val tokens = TokensDto(
                 jwtService.generateAccessToken(loginDto.email),
                 jwtService.generateRefreshToken(loginDto.email)

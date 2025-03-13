@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @SpringBootTest
-class JwtTest {
+class JwtMyTest {
 
     @Autowired
     lateinit var jwtService: JwtService

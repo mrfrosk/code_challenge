@@ -53,7 +53,7 @@ class ChallengeService {
 
     suspend fun addChallengeFromSource(username: String, offset: Int = 5) {
         source.getChallenges(username, offset).forEach {
-            createChallenge(username ,it)
+            createChallenge(username, it)
         }
     }
 

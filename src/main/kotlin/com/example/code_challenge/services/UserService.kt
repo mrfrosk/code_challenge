@@ -14,7 +14,7 @@ class UserService {
         return findUser(username).toDto()
     }
 
-    fun authUser(loginDto: LoginDto): Boolean {
+    fun isExists(loginDto: LoginDto): Boolean {
         return UserEntity.find {
             (UsersTable.email eq loginDto.email) and (UsersTable.password eq loginDto.password)
         }.firstOrNull() != null

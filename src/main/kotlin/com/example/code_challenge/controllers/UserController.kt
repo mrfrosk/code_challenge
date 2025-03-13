@@ -17,32 +17,31 @@ class UserController {
     @Autowired
     lateinit var userService: UserService
 
-    @GetMapping("/{email}", produces = ["application/json"])
-    suspend fun getUser(@PathVariable email: String): ResponseEntity<*> {
+    @GetMapping("/{username}", produces = ["application/json"])
+    suspend fun getUser(@PathVariable username: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {
-            userService.getUser(email)
+            userService.getUser(username)
         }
         val entity = ResponseEntity.ok(user)
         return entity
     }
 
 
-    @PutMapping("/{email}", produces = ["application/json"])
-    suspend fun updateUser(@PathVariable email: String, @RequestBody update: String): ResponseEntity<*> {
+    @PutMapping("/{username}", produces = ["application/json"])
+    suspend fun updateUser(@PathVariable username: String, @RequestBody update: String): ResponseEntity<*> {
         val updateData = Json.decodeFromString<UserDto>(update)
         newSuspendedTransaction {
-            userService.updateUser(email, updateData)
+            userService.updateUser(username, updateData)
         }
         return ResponseEntity.ok(updateData)
     }
 
-    @DeleteMapping("/{email}")
-    suspend fun deleteUser(@PathVariable email: String) {
+    @DeleteMapping("/{username}")
+    suspend fun deleteUser(@PathVariable username: String) {
         newSuspendedTransaction {
-            userService.deleteUser(email)
+            userService.deleteUser(username)
         }
     }
-
 
 
 }
