@@ -5,6 +5,7 @@ import com.example.code_challenge.data.database.dto.UserDto
 import com.example.code_challenge.data.database.entities.UserEntity
 import com.example.code_challenge.data.database.tables.UsersTable
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.or
 import org.springframework.stereotype.Service
 
 @Service
@@ -42,6 +43,10 @@ class UserService {
 
     fun isExists(email: String) = UserEntity.find {
         UsersTable.email eq email
+    }.firstOrNull() != null
+
+    fun isExists(email: String, username: String) = UserEntity.find {
+        (UsersTable.email eq email) or (UsersTable.username eq username)
     }.firstOrNull() != null
 
     private fun findUser(username: String): UserEntity {

@@ -6,6 +6,8 @@ import com.example.code_challenge.services.UserService
 import com.example.code_challenge.data.database.dto.TokensDto
 import com.example.code_challenge.data.database.dto.UserDto
 import kotlinx.serialization.json.Json
+import org.apache.el.parser.Token
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +28,9 @@ class AuthController {
 
     @Autowired
     lateinit var userService: UserService
+
+    @GetMapping("/test")
+    fun test() = "test"
 
     @PostMapping("/login")
     suspend fun getTokens(@RequestBody data: String): ResponseEntity<TokensDto> {
@@ -61,6 +66,24 @@ class AuthController {
             ResponseEntity.ok(userService.createUser(user))
         }
     }
+
+    @GetMapping("/login/oauth")
+    suspend fun oauthLogin(): ResponseEntity<*> {
+        val data = (SecurityContextHolder.getContext().authentication.principal as DefaultOAuth2User).attributes
+        val user = UserDto(data["email"].toString(), data["login"].toString(), UUID.randomUUID().toString())
+        newSuspendedTransaction {
+            if (!userService.isExists(user.email, user.username)){
+                userService.createUser(user)
+            }
+        }
+        val tokens = TokensDto(
+            jwtService.generateAccessToken(user.email),
+            jwtService.generateRefreshToken(user.email)
+        )
+        return ResponseEntity.ok(tokens)
+//    return "hello world"
+    }
+
 
     @PostMapping("tokens/update/{refreshToken}")
     suspend fun updateTokens(@PathVariable refreshToken: String): ResponseEntity<TokensDto> {

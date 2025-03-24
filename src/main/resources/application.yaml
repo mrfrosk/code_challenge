@@ -18,8 +18,8 @@ spring:
       client:
         registration:
           github:
-            clientId:  Ov23libx85lI2vcnaJhs
-            clientSecret: 22bf7c768891af3c94c462214381da430c20e458
+            clientId:  Ov23liWrF6khpQ0MJ9UM
+            clientSecret: fa2e6d6782d52adbdc905ea4beded0abf9678b72
 ---
 spring:
   name: test
@@ -33,6 +33,6 @@ spring:
       client:
         registration:
           github:
-            clientId:  Ov23libx85lI2vcnaJhs
-            clientSecret: 22bf7c768891af3c94c462214381da430c20e458
+            clientId: Ov23liWrF6khpQ0MJ9UM
+            clientSecret: fa2e6d6782d52adbdc905ea4beded0abf9678b72
 

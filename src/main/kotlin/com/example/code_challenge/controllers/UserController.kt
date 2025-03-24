@@ -17,6 +17,9 @@ class UserController {
     @Autowired
     lateinit var userService: UserService
 
+    @GetMapping("/test")
+    fun test() = "hello world"
+
     @GetMapping("/{username}", produces = ["application/json"])
     suspend fun getUser(@PathVariable username: String): ResponseEntity<*> {
         val user = newSuspendedTransaction {

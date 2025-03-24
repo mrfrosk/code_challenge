@@ -31,20 +31,25 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
 
 
         val authHeader: String? = request.getHeader("authorization")
-
+        println("authorization: $authHeader")
         if (authHeader.doesNotContainBearerToken()) {
+            println("нет токена")
             filterChain.doFilter(request, response)
             return
         }
         val jwtToken = authHeader!!.extractTokenValue()
         if (!tokenService.verifyAccessToken(jwtToken)) {
+            println("токен не верифицирован")
             filterChain.doFilter(request, response)
             return
         }
 
         val email = tokenService.getEmail(jwtToken)
 
+        println("$email: $email")
+
         if (transaction { userService.isExists(email) }) {
+            println("валидация токена")
             updateContext(email, request)
             filterChain.doFilter(request, response)
         }
